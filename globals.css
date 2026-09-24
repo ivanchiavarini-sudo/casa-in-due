@@ -3274,3 +3274,82 @@ main { padding-bottom: 125px; }
     min-height: 62px;
   }
 }
+
+
+/* CASA IN DUE V4 — correzione definitiva del blocco iniziale
+   La classe originale maintenance-open-hero era flex e metteva
+   titolo, testo e riepilogo tutti sulla stessa riga. */
+.maintenance-open-hero {
+  display: block !important;
+  overflow: visible;
+}
+
+.maintenance-open-hero > .eyebrow {
+  margin-bottom: 8px;
+}
+
+.maintenance-open-hero > h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(2.15rem, 5vw, 4rem);
+  line-height: .98;
+}
+
+.maintenance-open-hero > .journey-lead {
+  max-width: 760px;
+  margin: 16px 0 0;
+}
+
+.maintenance-open-hero > .home-summary-block {
+  width: 100%;
+  max-width: none;
+  margin-top: 28px;
+  box-sizing: border-box;
+}
+
+.home-summary-block .maintenance-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.home-summary-block .home-balance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.home-summary-block .summary-card,
+.home-summary-block .home-balance-grid > div {
+  min-width: 0;
+}
+
+.home-summary-block .summary-card strong {
+  white-space: normal;
+  word-break: normal;
+}
+
+@media (max-width: 850px) {
+  .home-summary-block .maintenance-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-summary-block .maintenance-summary-grid > .summary-card:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .maintenance-open-hero > h1 {
+    font-size: clamp(2rem, 11vw, 3rem);
+  }
+
+  .home-summary-block .maintenance-summary-grid,
+  .home-summary-block .home-balance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-summary-block .maintenance-summary-grid > .summary-card:first-child {
+    grid-column: auto;
+  }
+}
