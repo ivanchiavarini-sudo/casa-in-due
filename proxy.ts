@@ -1,0 +1,51 @@
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+import { resilientFetch } from "@/lib/resilient-fetch";
+
+/**
+ * Mantiene sincronizzati i cookie di Supabase tra browser e Server Components.
+ * Non effettua redirect: gli errori transitori di rete non devono espellere
+ * l'utente dall'applicazione.
+ */
+export async function proxy(request: NextRequest) {
+  let response = NextResponse.next({ request });
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) return response;
+
+  const supabase = createServerClient(url, key, {
+    global: { fetch: resilientFetch },
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet, headers) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        response = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          response.cookies.set(name, value, options),
+        );
+        Object.entries(headers || {}).forEach(([header, value]) =>
+          response.headers.set(header, value),
+        );
+      },
+    },
+  });
+
+  // getClaims verifica il JWT e rinnova i cookie quando necessario.
+  // Non trasformiamo un errore di rete momentaneo in un logout.
+  try {
+    await supabase.auth.getClaims();
+  } catch (error) {
+    console.error("Rinnovo sessione Supabase non riuscito:", error);
+  }
+
+  return response;
+}
+
+export const config = {
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
+};
