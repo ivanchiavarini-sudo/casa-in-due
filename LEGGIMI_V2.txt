@@ -1,0 +1,28 @@
+CASA IN DUE — V2 BUILD STABILE
+
+Questa versione evita che Next.js contatti Supabase durante il build Vercel.
+
+COME USARLA
+1. Estrai lo ZIP.
+2. Apri il repository GitHub "casa-in-due".
+3. Sostituisci TUTTO il contenuto del repository con il contenuto della cartella CASA-IN-DUE-v2.
+   Nella root devono vedersi direttamente:
+   app
+   components
+   lib
+   supabase
+   package.json
+   vercel.json
+4. Commit: "Casa in due v2 build stabile"
+5. Push.
+6. Vercel farà automaticamente un nuovo deploy.
+
+NON rieseguire SQL.
+NON modificare il Piccolo Manuale.
+
+Su Vercel devono già esserci:
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+OPENAI_API_KEY
+OPENAI_MODEL
+OPENAI_MEDIATION_MODEL
