@@ -442,22 +442,62 @@ export function MaintenanceSpace({
       <p className="eyebrow">Da usare da subito</p>
       <h1>Compiti, soldi e questioni pratiche</h1>
       <p className="journey-lead">Qui tenete insieme le cose concrete: chi fa cosa, quanto state spendendo e i temi che meritano un confronto più calmo.</p>
-      <div className="maintenance-summary-grid">
-        <div><strong>{activeTasks}</strong><span>compiti ancora attivi</span></div>
-        <div><strong>{euro(monthTotal)}</strong><span>spese del mese</span></div>
-        <div><strong>{euro(plannedExpenses)}</strong><span>spese non ancora regolate</span></div>
+      <div className="home-summary-block">
+        <div className="home-summary-head">
+          <div>
+            <span className="home-summary-kicker">Riepilogo</span>
+            <h2>Situazione di oggi</h2>
+          </div>
+        </div>
+
+        <div className="maintenance-summary-grid">
+          <div className="summary-card">
+            <span className="summary-label">Compiti attivi</span>
+            <strong>{activeTasks}</strong>
+            <span className="summary-caption">ancora da fare</span>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Spese del mese</span>
+            <strong>{euro(monthTotal)}</strong>
+            <span className="summary-caption">registrate questo mese</span>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Da regolare</span>
+            <strong>{euro(plannedExpenses)}</strong>
+            <span className="summary-caption">spese ancora aperte</span>
+          </div>
+        </div>
+
+        <div className="task-balance-section">
+          <span className="home-summary-kicker">Divisione dei compiti</span>
+          <div className="home-balance-grid">
+            <div>
+              <strong>{memberA.name}</strong>
+              <span>{taskLoad.result.get(memberA.id) || 0} assegnati</span>
+            </div>
+            <div className="shared-balance-card">
+              <strong>Insieme</strong>
+              <span>{taskLoad.shared} condivisi</span>
+            </div>
+            <div>
+              <strong>{memberB.name}</strong>
+              <span>{taskLoad.result.get(memberB.id) || 0} assegnati</span>
+            </div>
+          </div>
+        </div>
+
+        {Math.abs(netBalance) >= 0.01 ? <div className="balance-note">
+          <span className="balance-note-label">Saldo tra voi</span>
+          <strong>
+            {netBalance > 0
+              ? `${memberA.name} deve ${euro(netBalance)} a ${memberB.name}`
+              : `${memberB.name} deve ${euro(Math.abs(netBalance))} a ${memberA.name}`}
+          </strong>
+        </div> : <div className="balance-note balanced">
+          <span className="balance-note-label">Saldo tra voi</span>
+          <strong>Al momento siete pari</strong>
+        </div>}
       </div>
-      <div className="home-balance-grid">
-        <div><strong>{memberA.name}</strong><span>{taskLoad.result.get(memberA.id) || 0} compiti assegnati</span></div>
-        <div><strong>Insieme</strong><span>{taskLoad.shared} compiti condivisi</span></div>
-        <div><strong>{memberB.name}</strong><span>{taskLoad.result.get(memberB.id) || 0} compiti assegnati</span></div>
-      </div>
-      {Math.abs(netBalance) >= 0.01 ? <div className="balance-note">
-        <strong>Saldo da regolare:</strong>{" "}
-        {netBalance > 0
-          ? `${memberA.name} deve ${euro(netBalance)} a ${memberB.name}`
-          : `${memberB.name} deve ${euro(Math.abs(netBalance))} a ${memberA.name}`}
-      </div> : <div className="balance-note balanced"><strong>Saldo:</strong> al momento siete pari.</div>}
     </section>
 
     <nav className="maintenance-tabs" aria-label="Strumenti dello Spazio per noi">
